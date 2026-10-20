@@ -1,0 +1,37 @@
+# ── Environment (NEVER commit) ────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Firebase Service Account (NEVER commit) ───────────────────────
+*service-account*.json
+*firebase-adminsdk*.json
+*credentials*.json
+storage/cacert.pem
+
+# ── Backend (Laravel) ─────────────────────────────────────────────
+backend/vendor/
+backend/.env
+backend/storage/logs/*.log
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/storage/cacert.pem
+backend/database/database.sqlite
+backend/public/hot
+backend/public/storage
+backend/bootstrap/cache/*.php
+backend/.phpunit.result.cache
+
+# ── Frontend (Next.js) ────────────────────────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env.*.local
+
+# ── IDE & OS ──────────────────────────────────────────────────────
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

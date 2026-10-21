@@ -3,43 +3,47 @@
 > **Open-Source Learning Blueprint**
 > **Maintained by:** Jerald Jose (CodeMasterLYR)
 
-A lightweight starter kit demonstrating how to use **Firebase Realtime Database (RTDB)** as a real-time event bridge between a **Laravel 11 API backend** and a **Next.js 14 frontend**.
+A lightweight starter kit demonstrating real-time event bridging between a **Laravel 11 API backend** and a **Next.js frontend** using **Firebase Firestore Signals** (event act/trigger + secure REST fetch) and **Firebase Realtime Database (RTDB)**.
 
-When an external system (POS, ERP, mobile backend) calls the Laravel API, the backend writes to RTDB. The frontend listens to the same RTDB path and updates instantly — no polling, no WebSockets to manage.
+When an external system (POS, ERP, mobile app) calls the Laravel API, the backend dispatches a lightweight trigger signal to Firestore. Subscribed clients detect the signal in real time and automatically fetch the full, authenticated payload from the Laravel API endpoint.
 
 ---
 
 ## How It Works
 
 ```
-External App / API
-      │
-      │  POST /api/events  (X-API-KEY header)
-      ▼
+External App / System (POS, ERP, KMP Mobile)
+       │
+       │  POST /api/events  (X-API-KEY header)
+       ▼
 Laravel 11 Backend
-      │
-      │  FirebaseRtdbService::write("events/orders/latest", {...})
-      ▼
-Firebase Realtime Database
-      │
-      │  onValue listener fires (< 200ms)
-      ▼
-Next.js Frontend (any connected browser)
-      │
-      └─ useRtdbChannel("orders") → state updates → UI re-renders
+       │
+       ├─► 1. Caches / stores full payload securely in backend
+       │
+       └─► 2. Emits lightweight trigger signal to Firestore
+              { "transaction_id": "100192", "triggered_at": "...", "endpoint": "/api/events/alerts" }
+                     │
+                     ▼
+             Firestore onSnapshot (< 100ms)
+                     │
+                     ▼
+Next.js Frontend (useFirestoreSignal Hook)
+       │
+       └─► 3. Catches trigger signal, alerts UI, and executes API fetch
+              GET /api/events/alerts ➔ Secure full data loaded and rendered!
 ```
 
 ---
 
 ## Features
 
-- `FirebaseRtdbService` — clean Laravel service for RTDB `write`, `push`, `delete`
-- `EventController` — authenticated endpoint for external systems to fire events
-- `ValidateApiKey` middleware — `X-API-KEY` server-to-server auth
-- `ForceJsonResponse` — API-only, never returns HTML
-- `useRtdbChannel` — React hook, subscribes to any RTDB path live
-- `EventNotificationBadge` — drop-in component, shows event type + payload
-- Supports both `FIREBASE_CREDENTIALS` JSON file OR individual env vars
+- **Firestore Event Act / Signal Pattern** — sends only lightweight metadata (timestamp, ID, endpoint) through Firebase, keeping cloud DB usage minimal while preserving full data security in Laravel.
+- **`FirebaseFirestoreService`** — Laravel service for emitting Firestore event triggers.
+- **`useFirestoreSignal`** — React hook subscribing to Firestore signals and automatically triggering API data fetches.
+- **`FirebaseRtdbService` & `useRtdbChannel`** — full RTDB direct streaming connector support.
+- **`EventController`** — authenticated endpoints: `POST /api/events` (dispatch) & `GET /api/events/{channel}` (fetch).
+- **`ValidateApiKey`** middleware — `X-API-KEY` server-to-server and mobile identification.
+- **Multi-Platform CLI Examples** — one-click copyable snippets for Windows CMD (single-line, multi-line `^`), PowerShell, and Bash.
 
 ---
 

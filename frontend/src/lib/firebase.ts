@@ -1,10 +1,11 @@
 /**
  * Firebase JS SDK initializer.
- * Uses NEXT_PUBLIC_FIREBASE_* env vars from .env.local.
- * Safe to import in client components — all values are public config (not secrets).
+ * Supports both Firestore (real-time lightweight event signals)
+ * and RTDB (Realtime Database connector).
  */
 import { initializeApp, getApps } from "firebase/app";
 import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey:            process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -20,3 +21,4 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const rtdb = getDatabase(app);
+export const db   = getFirestore(app);

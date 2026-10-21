@@ -26,14 +26,14 @@ export default function Home() {
             OPEN SOURCE
           </span>
           <span style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
-            Laravel 11 + Firebase RTDB
+            Laravel 11 + Firestore Signals & REST API
           </span>
         </div>
         <h1 style={{ fontSize: "2rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
           Real-Time Event Stream Monitor
         </h1>
         <p style={{ color: "#94a3b8", marginTop: "0.5rem", fontSize: "0.95rem" }}>
-          Subscribed to Firebase Realtime Database. Any event posted to the Laravel backend fires here instantly.
+          Subscribed to Firestore <code>events_channel</code>. When a trigger signal arrives, the client automatically executes an API fetch to the Laravel backend for full data.
         </p>
       </header>
 

@@ -113,16 +113,54 @@ NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://your-project-default-rtdb.firebaseio.c
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
 ```
 
-### 3. Fire an Event (test with curl)
+### 3. Fire an Event (Test with Terminal)
 
-```bash
-curl -X POST http://localhost:8000/api/events \
-  -H "X-API-KEY: your-secure-random-key" \
-  -H "Content-Type: application/json" \
-  -d '{"type":"order.created","channel":"orders","payload":{"order_id":"ORD-001","amount":1500}}'
+**Windows CMD (Single-Line):**
+```cmd
+curl -X POST http://localhost:8000/api/events -H "Content-Type: application/json" -H "X-API-KEY: lyr-firebase-sync-test-key-2026" -d "{\"channel\": \"alerts\", \"type\": \"order.completed\", \"payload\": {\"order_id\": \"ORD-9902\", \"amount\": 2500, \"customer\": \"Juan Dela Cruz\"}}"
 ```
 
-The Next.js dashboard updates in < 200ms. No page refresh needed.
+**Windows CMD (Multi-Line `^`):**
+```cmd
+curl -X POST http://localhost:8000/api/events ^
+  -H "Content-Type: application/json" ^
+  -H "X-API-KEY: lyr-firebase-sync-test-key-2026" ^
+  -d "{\"channel\": \"alerts\", \"type\": \"order.completed\", \"payload\": {\"order_id\": \"ORD-9902\", \"amount\": 2500, \"customer\": \"Juan Dela Cruz\"}}"
+```
+
+**PowerShell:**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8000/api/events" -Method Post `
+  -Headers @{ "X-API-KEY" = "lyr-firebase-sync-test-key-2026" } `
+  -ContentType "application/json" `
+  -Body (@{
+    channel = "alerts"
+    type    = "order.completed"
+    payload = @{
+      order_id = "ORD-9902"
+      amount   = 2500
+      customer = "Juan Dela Cruz"
+    }
+  } | ConvertTo-Json -Depth 5)
+```
+
+**Bash / macOS / Linux:**
+```bash
+curl -X POST http://localhost:8000/api/events \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: lyr-firebase-sync-test-key-2026" \
+  -d '{
+    "channel": "alerts",
+    "type": "order.completed",
+    "payload": {
+      "order_id": "ORD-9902",
+      "amount": 2500,
+      "customer": "Juan Dela Cruz"
+    }
+  }'
+```
+
+The Next.js dashboard updates in < 200ms without page reload.
 
 ---
 
